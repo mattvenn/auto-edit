@@ -1,21 +1,21 @@
-import ffmpeg, json
-# https://github.com/kkroening/ffmpeg-python
-with open("cuts.json") as fh:
-    cuts = json.load(fh)
+#!/usr/bin/env python3
+from datetime import timedelta
+import json, os
 
-init_time = cuts[0]['timestamp']
+safety = 1 # second
+
+with open("cuts.json") as fh:
+    data = json.load(fh)
+cuts = data['cuts']
+input_file = data['input_file']
+output_file = data['output_file']
+filename, extension = os.path.splitext(input_file)
+print(f"working from {input_file}")
 index = 0
 for cut in cuts:
-    print(cut['type'], cut['timestamp'] - init_time)
     if cut['type'] == 'start':
-        start = cut['timestamp'] - init_time
+        start = timedelta(seconds=round(cut['timestamp'],2) - safety)
     if cut['type'] == 'end':
-        end = cut['timestamp'] - init_time
-        print(f"cutting new clip {index} from {start} to {end}")
-        stream = ffmpeg.input('input.mkv')
-        stream = ffmpeg.trim(stream, start=start, end=end)
-        audio_stream = ffmpeg.input(stream).audio
-        trimed_audio_stream = audio_stream.filter('atrim', start=start, end=end)
-        stream = ffmpeg.output(stream, trimmed_audio_stream, f'output{index}.mkv')
-        ffmpeg.run(stream)
+        end = timedelta(seconds=round(cut['timestamp'],2) + safety)
+        print(f"cutting new clip {index} from {start} to {end} to {index:03}_{output_file}{extension}")
         index += 1
