@@ -12,6 +12,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super(self.__class__, self).__init__()
 
         self.cuts = []
+        self.start_time = None
 
         shortcut_start = QShortcut(QKeySequence('S'), self) 
         button1 = QPushButton(self)
@@ -41,12 +42,16 @@ class MainWindow(QtWidgets.QMainWindow):
         app.quit()
 
     def button1_clicked(self):
-        cut = {'type': 'start', 'timestamp': time.time()}
+        if self.start_time is None:
+            self.start_time = time.time()
+        cut = {'type': 'start', 'timestamp': "{:.2f}".format(time.time() - self.start_time)}
         print(cut)
         self.cuts.append(cut)
         
     def button2_clicked(self):
-        cut = {'type': 'end', 'timestamp': time.time()}
+        if self.start_time is None:
+            return
+        cut = {'type': 'end', 'timestamp': "{:.2f}".format(time.time() - self.start_time)}
         print(cut)
         self.cuts.append(cut)
 
