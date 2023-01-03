@@ -9,6 +9,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QKeySequence
 
 obs_videos = '/home/matt/Videos/obs/*mkv'
+obs_videos = '/media/matt/Seagate Expansion Drive/obs/*mov'
 
 class MainWindow(QtWidgets.QMainWindow):
 
@@ -17,6 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.cuts = []
         self.videos = glob.glob(obs_videos) 
+        print(f'found {len(self.videos)} videos in {obs_videos}')
         self.start_time = None
 
         shortcut_start = QShortcut(QKeySequence('S'), self) 

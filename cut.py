@@ -2,7 +2,7 @@
 from datetime import timedelta
 import json, os
 
-safety = 1 # second
+safety = 0.25 # second
 
 with open("cuts.json") as fh:
     data = json.load(fh)
@@ -18,6 +18,6 @@ for cut in cuts:
     if cut['type'] == 'end':
         end = timedelta(seconds=round(cut['timestamp'],2) + safety)
         print(f"cutting new clip {index} from {start} to {end} to {index:03}_{output_file}{extension}")
-        ffmpeg = f'ffmpeg -y -ss {start} -to {end} -i input.mov -c copy {index:03d}_{output_file}{extension}'
+        ffmpeg = f'ffmpeg -y -ss {start} -to {end} -i {input_file} -c copy -map 0 {index:03d}_{output_file}{extension}'
         os.system(ffmpeg)
         index += 1
