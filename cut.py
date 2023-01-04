@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from datetime import timedelta
-import json, os
+import json
+import subprocess
 
 safety = 0.25 # second
 
@@ -19,5 +20,5 @@ for cut in cuts:
         end = timedelta(seconds=round(cut['timestamp'],2) + safety)
         print(f"cutting new clip {index} from {start} to {end} to {index:03}_{output_file}{extension}")
         ffmpeg = f'ffmpeg -y -ss {start} -to {end} -i {input_file} -c copy -map 0 {index:03d}_{output_file}{extension}'
-        os.system(ffmpeg)
+        subprocess.run(['ffmpeg', '-y', '-ss', str(start), '-to', str(end), '-i', input_file, '-c', 'copy', '-map', '0', f'{index:03d}_{output_file}{extension}'])
         index += 1
