@@ -15,7 +15,7 @@ def parse():
                 timecode_m = int(m.group(2))
                 timecode_s = int(m.group(3))
             else:
-                print("error reading file - couldn't match timecode")
+                print(f"error reading file - couldn't match timecode: {lines[line_num]}")
                 exit(1)
 
             # next get the description
@@ -24,7 +24,7 @@ def parse():
                 description = m.group(1)
                 timestamps.append({'h': timecode_h, 'm': timecode_m, 's': timecode_s, 'desc': description})
             else:
-                print("error reading file - couldn't match description")
+                print(f"error reading file - couldn't match description: {lines[line_num+1]}")
                 exit(1)
 
     print(f"read {len(timestamps)} timestamps")
